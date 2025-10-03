@@ -8,6 +8,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import model.Employee;
+import java.util.ArrayList;
+
 
 public class DaoImplJDBC implements Dao {
 	Connection connection;
@@ -17,7 +19,7 @@ public class DaoImplJDBC implements Dao {
 		// Define connection parameters
 		String url = "jdbc:mysql://localhost:3306/shop";
 		String user = "root";
-		String pass = "";
+		String pass = "yogui10332027";
 		try {
 			this.connection = DriverManager.getConnection(url, user, pass);
 		} catch (SQLException e) {
@@ -61,5 +63,17 @@ public class DaoImplJDBC implements Dao {
 		}
     	return employee;
 	}
-
+	
+	@Override
+	public boolean writeInventory(ArrayList<model.Product> inventory) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	
+	@Override
+	public ArrayList<model.Product> getInventory() {
+		ArrayList<model.Product> inventory = new ArrayList<>();
+		return inventory;
+	}
+	
 }
