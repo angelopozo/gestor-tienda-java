@@ -217,7 +217,10 @@ public class Shop {
 	 * read inventory from file
 	 */
 	private void readInventory() {
+		this.showInventory();
 		inventory = dao.getInventory();
+		this.showInventory();
+
 	}
 	
 	public boolean writeInventory() {
