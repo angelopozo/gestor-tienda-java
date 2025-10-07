@@ -108,7 +108,7 @@ public class DaoImplFile implements Dao {
 			// write line by line products in inventory
 			int count = 1;
 			for (Product product : inventory) {
-				// format line TO BE -> Product:Fresa;Wholesaler Price:5.00;Stock:20;
+				// format line TO BE -> 1;Product:Manzana;Stock:10;
 				StringBuilder line = new StringBuilder(count + ";Product:" + product.getName() + ";Stock:" + product.getStock() + ";");
 				pw.write(line.toString());
 				fw.write("\n");
