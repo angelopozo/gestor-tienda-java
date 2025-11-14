@@ -7,6 +7,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import main.Shop;
+import dao.DaoImplJDBC;
 import utils.Constants;
 
 import javax.swing.JLabel;
@@ -69,6 +70,7 @@ public class ShopView extends JFrame implements ActionListener, KeyListener {
 
 		// create shop
 		shop = new Shop();
+		
 		shop.loadInventory();
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

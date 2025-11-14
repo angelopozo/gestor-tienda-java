@@ -69,7 +69,7 @@ public class DaoImplFile implements Dao {
 				}
 				// add product to inventory
 
-				inventory.add(new Product(name, new Amount(wholesalerPrice), true, stock));
+				inventory.add(new Product(1, name, new Amount(wholesalerPrice), true, stock));
 
 				// read next line
 				line = br.readLine();
@@ -109,18 +109,19 @@ public class DaoImplFile implements Dao {
 			int count = 1;
 			for (Product product : inventory) {
 				// format line TO BE -> 1;Product:Manzana;Stock:10;
-				StringBuilder line = new StringBuilder(count + ";Product:" + product.getName() + ";Stock:" + product.getStock() + ";");
+				StringBuilder line = new StringBuilder(
+						count + ";Product:" + product.getName() + ";Stock:" + product.getStock() + ";");
 				pw.write(line.toString());
 				fw.write("\n");
 				count++;
 			}
-			
+
 			// write total number of products
 			// format line TO BE -> Total number of products:20;
 			StringBuilder line = new StringBuilder("Total number of products:" + inventory.size() + ";");
 			pw.write(line.toString());
 			fw.write("\n");
-			
+
 			// close files
 			pw.close();
 			fw.close();
@@ -149,6 +150,21 @@ public class DaoImplFile implements Dao {
 	public Employee getEmployee(int employeeId, String password) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void addProduct(Product product) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void updateProduct(Product product) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void deleteProduct(int productId) {
+		// TODO Auto-generated method stub
 	}
 
 }

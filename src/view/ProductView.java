@@ -20,7 +20,7 @@ import model.Product;
 import model.Amount;
 import utils.Constants;
 
-public class ProductView extends JDialog implements ActionListener{
+public class ProductView extends JDialog implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
 	private Shop shop;
@@ -51,18 +51,18 @@ public class ProductView extends JDialog implements ActionListener{
 	public ProductView(Shop shop, int option) {
 		this.shop = shop;
 		this.option = option;
-		
+
 		// main configuration dialog
 		switch (option) {
 		case Constants.OPTION_ADD_PRODUCT:
-			setTitle("Añadir Producto");			
+			setTitle("Añadir Producto");
 			break;
 		case Constants.OPTION_ADD_STOCK:
-			setTitle("Añadir Stock");			
+			setTitle("Añadir Stock");
 			break;
 		case Constants.OPTION_REMOVE_PRODUCT:
-			setTitle("Eliminar Producto");			
-			break;		
+			setTitle("Eliminar Producto");
+			break;
 
 		default:
 			break;
@@ -72,7 +72,7 @@ public class ProductView extends JDialog implements ActionListener{
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
-		
+
 		// name section
 		JLabel lblName = new JLabel("Nombre producto:");
 		lblName.setFont(new Font("Tahoma", Font.PLAIN, 15));
@@ -83,8 +83,8 @@ public class ProductView extends JDialog implements ActionListener{
 		textFieldName.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		textFieldName.setBounds(169, 10, 136, 25);
 		contentPanel.add(textFieldName);
-		textFieldName.setColumns(10);		
-		
+		textFieldName.setColumns(10);
+
 		// stock section
 		JLabel lblStock = new JLabel("Stock producto:");
 		lblStock.setFont(new Font("Tahoma", Font.PLAIN, 15));
@@ -98,12 +98,12 @@ public class ProductView extends JDialog implements ActionListener{
 		textFieldStock.setColumns(10);
 		if (option == Constants.OPTION_ADD_PRODUCT || option == Constants.OPTION_ADD_STOCK) {
 			lblStock.setVisible(true);
-			textFieldStock.setVisible(true);			
-		}else {
+			textFieldStock.setVisible(true);
+		} else {
 			lblStock.setVisible(false);
 			textFieldStock.setVisible(false);
 		}
-		
+
 		// price section
 		JLabel lblPrice = new JLabel("Precio producto:");
 		lblPrice.setFont(new Font("Tahoma", Font.PLAIN, 15));
@@ -117,13 +117,12 @@ public class ProductView extends JDialog implements ActionListener{
 		textFieldPrice.setColumns(10);
 		if (option == Constants.OPTION_ADD_PRODUCT) {
 			lblPrice.setVisible(true);
-			textFieldPrice.setVisible(true);			
-		}else {
+			textFieldPrice.setVisible(true);
+		} else {
 			lblPrice.setVisible(false);
 			textFieldPrice.setVisible(false);
 		}
-		
-		
+
 		{
 			JPanel buttonPane = new JPanel();
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
@@ -153,71 +152,69 @@ public class ProductView extends JDialog implements ActionListener{
 			case Constants.OPTION_ADD_PRODUCT:
 				// check product does not exist
 				product = shop.findProduct(textFieldName.getText());
-				
+
 				if (product != null) {
-					JOptionPane.showMessageDialog(null, "Producto ya existe ", "Error",
-							JOptionPane.ERROR_MESSAGE);
-					
+					JOptionPane.showMessageDialog(null, "Producto ya existe ", "Error", JOptionPane.ERROR_MESSAGE);
+
 				} else {
-					product = new Product(textFieldName.getText(), 
-							new Amount(Double.parseDouble(textFieldPrice.getText())) ,
-							true,
+					product = new Product(Shop.numberProducts, textFieldName.getText(),
+							new Amount(Double.parseDouble(textFieldPrice.getText())), true,
 							Integer.parseInt(textFieldStock.getText()));
 					shop.addProduct(product);
 					JOptionPane.showMessageDialog(null, "Producto añadido ", "Information",
 							JOptionPane.INFORMATION_MESSAGE);
 					// release current screen
-					dispose();	
+					dispose();
 				}
-				
+
 				break;
-				
+
 			case Constants.OPTION_ADD_STOCK:
 				// check product exists
 				product = shop.findProduct(textFieldName.getText());
-				
+
 				if (product == null) {
-					JOptionPane.showMessageDialog(null, "Producto no existe ", "Error",
-							JOptionPane.ERROR_MESSAGE);
-					
-				} else {					
+					JOptionPane.showMessageDialog(null, "Producto no existe ", "Error", JOptionPane.ERROR_MESSAGE);
+
+				} else {
 					product.setStock(product.getStock() + Integer.parseInt(textFieldStock.getText()));
+					shop.updateProduct(product);
 					JOptionPane.showMessageDialog(null, "Stock actualizado ", "Information",
 							JOptionPane.INFORMATION_MESSAGE);
 					// release current screen
-					dispose();	
+					dispose();
 				}
-				
+
 				break;
-				
+
 			case Constants.OPTION_REMOVE_PRODUCT:
 				// check product exists
 				product = shop.findProduct(textFieldName.getText());
-				
+
 				if (product == null) {
-					JOptionPane.showMessageDialog(null, "Producto no existe ", "Error",
-							JOptionPane.ERROR_MESSAGE);
-					
-				} else {					
+					JOptionPane.showMessageDialog(null, "Producto no existe ", "Error", JOptionPane.ERROR_MESSAGE);
+
+				} else {
 					shop.getInventory().remove(product);
+					shop.deleteProduct(product.getId());
 					JOptionPane.showMessageDialog(null, "Producto eliminado", "Information",
 							JOptionPane.INFORMATION_MESSAGE);
 					// release current screen
-					dispose();	
+					dispose();
 				}
-				
+
 				break;
 
 			default:
 				break;
 			}
-			
+
 		}
-		
+
 		if (e.getSource() == cancelButton) {
 			// release current screen
-			dispose();			
-		}		
+			dispose();
+		}
 	}
 
 }

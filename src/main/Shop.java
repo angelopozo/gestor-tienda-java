@@ -18,93 +18,78 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import dao.Dao;
-import dao.DaoImplFile;
+import dao.DaoImplJDBC;
 
 public class Shop {
 	private Amount cash = new Amount(100.00);
 //	private Product[] inventory;
 	private ArrayList<Product> inventory;
-	private int numberProducts;
+	public static int numberProducts;
 //	private Sale[] sales;
 	private ArrayList<Sale> sales;
 	private int numberSales;
-	
-	private Dao dao = new DaoImplFile();
+
+	private static Dao dao = new DaoImplJDBC();
 
 	final static double TAX_RATE = 1.04;
 
 	public Shop() {
 		inventory = new ArrayList<Product>();
 		sales = new ArrayList<Sale>();
+
+		try {
+			dao.connect();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
-	
 
 	public Amount getCash() {
 		return cash;
 	}
 
-
-
 	public void setCash(Amount cash) {
 		this.cash = cash;
 	}
-
-
 
 	public ArrayList<Product> getInventory() {
 		return inventory;
 	}
 
-
-
 	public void setInventory(ArrayList<Product> inventory) {
 		this.inventory = inventory;
 	}
-
-
 
 	public int getNumberProducts() {
 		return numberProducts;
 	}
 
-
-
 	public void setNumberProducts(int numberProducts) {
 		this.numberProducts = numberProducts;
 	}
-
-
 
 	public ArrayList<Sale> getSales() {
 		return sales;
 	}
 
-
-
 	public void setSales(ArrayList<Sale> sales) {
 		this.sales = sales;
 	}
-
-
 
 	public int getNumberSales() {
 		return numberSales;
 	}
 
-
-
 	public void setNumberSales(int numberSales) {
 		this.numberSales = numberSales;
 	}
-
-
 
 	public static void main(String[] args) {
 		Shop shop = new Shop();
 
 		// load inventory from external data
 		shop.loadInventory();
-		
+
 		// init session as employee
 		shop.initSession();
 
@@ -140,7 +125,7 @@ public class Shop {
 				break;
 
 			case 3:
-				shop.addStock();
+				// shop.addStock();
 				break;
 
 			case 4:
@@ -164,7 +149,7 @@ public class Shop {
 				break;
 
 			case 9:
-				shop.removeProduct();
+				// shop.removeProduct();
 				break;
 
 			case 10:
@@ -179,18 +164,18 @@ public class Shop {
 
 	private void initSession() {
 		// TODO Auto-generated method stub
-		
+
 		Employee employee = new Employee("test");
-		boolean logged=false;
-		
+		boolean logged = false;
+
 		do {
 			Scanner scanner = new Scanner(System.in);
 			System.out.println("Introduzca numero de empleado: ");
 			int employeeId = scanner.nextInt();
-			
+
 			System.out.println("Introduzca contraseña: ");
 			String password = scanner.next();
-			
+
 			logged = employee.login(employeeId, password);
 			if (logged) {
 				System.out.println("Login correcto ");
@@ -198,7 +183,7 @@ public class Shop {
 				System.out.println("Usuario o password incorrectos ");
 			}
 		} while (!logged);
-				
+
 	}
 
 	/**
@@ -222,7 +207,7 @@ public class Shop {
 		this.showInventory();
 
 	}
-	
+
 	public boolean writeInventory() {
 		return dao.writeInventory(inventory);
 	}
@@ -249,8 +234,8 @@ public class Shop {
 		double wholesalerPrice = scanner.nextDouble();
 		System.out.print("Stock: ");
 		int stock = scanner.nextInt();
-
-		addProduct(new Product(name, new Amount(wholesalerPrice), true, stock));
+		Product.getTotalProducts();
+		addProduct(new Product(Product.getTotalProducts() + 1, name, new Amount(wholesalerPrice), true, stock));
 	}
 
 	/**
@@ -377,10 +362,11 @@ public class Shop {
 		totalAmount.setValue(totalAmount.getValue() * TAX_RATE);
 		// show cost total
 		System.out.println("Venta realizada con éxito, total: " + totalAmount);
-		
+
 		// make payment
-		if(!client.pay(totalAmount)) {
-			System.out.println("Cliente debe: " + client.getBalance());;
+		if (!client.pay(totalAmount)) {
+			System.out.println("Cliente debe: " + client.getBalance());
+			;
 		}
 
 		// create sale
@@ -404,15 +390,15 @@ public class Shop {
 				System.out.println(sale);
 			}
 		}
-		
+
 		// ask for client name
 		Scanner sc = new Scanner(System.in);
 		System.out.println("Exportar fichero ventas? S / N");
 		String option = sc.nextLine();
 		if ("S".equalsIgnoreCase(option)) {
 			this.writeSales();
-		} 
-		
+		}
+
 	}
 
 	/**
@@ -422,49 +408,51 @@ public class Shop {
 		// define file name based on date
 		LocalDate myObj = LocalDate.now();
 		String fileName = "sales_" + myObj.toString() + ".txt";
-		
+
 		// locate file, path and name
 		File f = new File(System.getProperty("user.dir") + File.separator + "files" + File.separator + fileName);
-				
+
 		try {
 			// wrap in proper classes
 			FileWriter fw;
 			fw = new FileWriter(f, true);
 			PrintWriter pw = new PrintWriter(fw);
-			
+
 			// write line by line
-			int counterSale=1;
-			for (Sale sale : sales) {				
+			int counterSale = 1;
+			for (Sale sale : sales) {
 				// format first line TO BE -> 1;Client=PERE;Date=29-02-2024 12:49:50;
-				StringBuilder firstLine = new StringBuilder(counterSale+";Client="+sale.getClient()+";Date=" + sale.formatDate()+";");
+				StringBuilder firstLine = new StringBuilder(
+						counterSale + ";Client=" + sale.getClient() + ";Date=" + sale.formatDate() + ";");
 				pw.write(firstLine.toString());
 				fw.write("\n");
-				
-				// format second line TO BE -> 1;Products=Manzana,20.0€;Fresa,10.0€;Hamburguesa,60.0€;
+
+				// format second line TO BE ->
+				// 1;Products=Manzana,20.0€;Fresa,10.0€;Hamburguesa,60.0€;
 				// build products line
-				StringBuilder productLine= new StringBuilder();
+				StringBuilder productLine = new StringBuilder();
 				for (Product product : sale.getProducts()) {
-					productLine.append(product.getName()+ "," + product.getPublicPrice()+";");
+					productLine.append(product.getName() + "," + product.getPublicPrice() + ";");
 				}
-				StringBuilder secondLine = new StringBuilder(counterSale+ ";" + "Products=" + productLine +";");						                                                
-				pw.write(secondLine.toString());	
+				StringBuilder secondLine = new StringBuilder(counterSale + ";" + "Products=" + productLine + ";");
+				pw.write(secondLine.toString());
 				fw.write("\n");
-				
+
 				// format third line TO BE -> 1;Amount=93.60€;
-				StringBuilder thirdLine = new StringBuilder(counterSale+ ";" + "Amount=" + sale.getAmount() +";");						                                                
-				pw.write(thirdLine.toString());	
+				StringBuilder thirdLine = new StringBuilder(counterSale + ";" + "Amount=" + sale.getAmount() + ";");
+				pw.write(thirdLine.toString());
 				fw.write("\n");
-				
+
 				// increment counter sales
 				counterSale++;
 			}
 			// close files
 			pw.close();
 			fw.close();
-			
+
 		} catch (IOException e) {
 			e.printStackTrace();
-		}		
+		}
 	}
 
 	/**
@@ -491,11 +479,39 @@ public class Shop {
 			System.out.println("No se pueden añadir más productos, se ha alcanzado el máximo de " + inventory.size());
 			return;
 		}
-		inventory.add(product);
+
+		dao.addProduct(product);
 		numberProducts++;
 	}
-	
-	
+
+	/**
+	 * remove a new product to inventory getting data from console
+	 * 
+	 * @param id
+	 */
+	public void deleteProduct(int id) {
+		if (inventory.size() == 0) {
+			System.out.println("No se pueden eliminar productos, inventario vacio");
+			return;
+		}
+
+		dao.deleteProduct(id);
+		numberProducts--;
+	}
+
+	/**
+	 * add stock for a specific product
+	 * 
+	 * @param product
+	 */
+	public void updateProduct(Product product) {
+		if (product == null) {
+			System.out.println("Producto no encontrado");
+			return;
+		}
+
+		dao.updateProduct(product);
+	}
 
 	/**
 	 * check if inventory is full or not
