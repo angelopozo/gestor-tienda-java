@@ -14,7 +14,7 @@ The objective of this project is to develop a system capable of managing various
 - **Git:** Clone the project from the repository.
 
 ```
-git clone https://github.com/Stucom-Pelai/MP0486_RA1_Files_Shop.git
+git clone https://github.com/angelopozo/gestor-tienda-java.git
 ```
 
 ## Features
@@ -32,6 +32,7 @@ git clone https://github.com/Stucom-Pelai/MP0486_RA1_Files_Shop.git
    - ShopView: A dashboard displaying options to manage products, inventory, and sales.
    - CashView: A window showing the total cash available in the store.
    - ProductView: An intuitive interface for adding, updating, and removing products.
+   - InvenrtoryView: A detailed view of the current inventory status.
  
 ### Data Management
 #### Database Integration
