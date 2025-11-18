@@ -10,11 +10,9 @@ import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-import main.Shop;
 import model.Amount;
 import model.Employee;
 import model.Product;
-import model.Sale;
 
 public class DaoImplFile implements Dao {
 

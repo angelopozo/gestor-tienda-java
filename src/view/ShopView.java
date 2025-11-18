@@ -7,7 +7,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import main.Shop;
-import dao.DaoImplJDBC;
+// import dao.DaoImplJDBC;
 import utils.Constants;
 
 import javax.swing.JLabel;
@@ -33,6 +33,7 @@ public class ShopView extends JFrame implements ActionListener, KeyListener {
 	private JButton btnAddProduct;
 	private JButton btnAddStock;
 	private JButton btnRemoveProduct;
+	private JButton btnShowInventory;
 
 	public Shop getShop() {
 		return shop;
@@ -121,12 +122,21 @@ public class ShopView extends JFrame implements ActionListener, KeyListener {
 		contentPane.add(btnAddStock);
 		// listen button
 		btnAddStock.addActionListener(this);
-
+		
+		// option show inventory
+		btnShowInventory = new JButton("5. Ver inventario");
+		btnShowInventory.setHorizontalAlignment(SwingConstants.LEFT);
+		btnShowInventory.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		btnShowInventory.setBounds(99, 240, 236, 40);
+		contentPane.add(btnShowInventory);
+		// listen button
+		btnShowInventory.addActionListener(this);
+		
 		// option add product
 		btnRemoveProduct = new JButton("9. Eliminar producto");
 		btnRemoveProduct.setHorizontalAlignment(SwingConstants.LEFT);
 		btnRemoveProduct.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		btnRemoveProduct.setBounds(99, 240, 236, 40);
+		btnRemoveProduct.setBounds(99, 290, 236, 40);
 		contentPane.add(btnRemoveProduct);
 		// listen button
 		btnRemoveProduct.addActionListener(this);
@@ -152,6 +162,9 @@ public class ShopView extends JFrame implements ActionListener, KeyListener {
 		}
 		if (e.getKeyChar() == '3') {
 			this.openProductView(Constants.OPTION_ADD_STOCK);
+		}
+		if (e.getKeyChar() == '5') {
+			this.openInventoryView();
 		}
 		if (e.getKeyChar() == '9') {
 			this.openProductView(Constants.OPTION_REMOVE_PRODUCT);
@@ -182,6 +195,9 @@ public class ShopView extends JFrame implements ActionListener, KeyListener {
 		}
 		if (e.getSource() == btnRemoveProduct) {
 			this.openProductView(Constants.OPTION_REMOVE_PRODUCT);
+		}
+		if (e.getSource() == btnShowInventory) {
+			this.openInventoryView();
 		}
 
 	}
@@ -217,6 +233,16 @@ public class ShopView extends JFrame implements ActionListener, KeyListener {
 	public void openProductView(int option) {
 		// create a dialog Box
 		ProductView dialog = new ProductView(shop, option);
+		// setsize of dialog
+		dialog.setSize(400, 400);
+		// set visibility of dialog
+		dialog.setModal(true);
+		dialog.setVisible(true);
+	}
+	
+	public void openInventoryView() {
+		// create a dialog Box
+		InventoryView dialog = new InventoryView(shop);
 		// setsize of dialog
 		dialog.setSize(400, 400);
 		// set visibility of dialog

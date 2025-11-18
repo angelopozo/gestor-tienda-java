@@ -1,6 +1,6 @@
 package model;
 
-import main.Logable;
+// import main.Logable;
 import main.Payable;
 
 public class Client extends Person implements Payable {
