@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import dao.Dao;
-import dao.DaoImplJDBC;
+import dao.DaoImplHibernate;
 
 public class Shop {
 	private Amount cash = new Amount(100.00);
@@ -29,7 +29,7 @@ public class Shop {
 	private ArrayList<Sale> sales;
 	private int numberSales;
 
-	private static Dao dao = new DaoImplJDBC();
+	private static Dao dao = new DaoImplHibernate();
 
 	final static double TAX_RATE = 1.04;
 
@@ -208,7 +208,7 @@ public class Shop {
 
 	}
 
-	public boolean writeInventory() {
+	public boolean writeInventory() {		
 		return dao.writeInventory(inventory);
 	}
 
@@ -235,7 +235,7 @@ public class Shop {
 		System.out.print("Stock: ");
 		int stock = scanner.nextInt();
 		Product.getTotalProducts();
-		addProduct(new Product(Product.getTotalProducts() + 1, name, new Amount(wholesalerPrice), true, stock));
+		addProduct(new Product(name, wholesalerPrice, true, stock));
 	}
 
 	/**
@@ -343,7 +343,7 @@ public class Shop {
 
 			if (product != null && product.isAvailable()) {
 				productAvailable = true;
-				totalAmount.setValue(totalAmount.getValue() + product.getPublicPrice().getValue());
+				totalAmount.setValue(totalAmount.getValue() + product.getPublicPrice());
 				product.setStock(product.getStock() - 1);
 				shoppingCart.add(product);
 				numberShopping++;

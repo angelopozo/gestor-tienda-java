@@ -50,7 +50,7 @@ public class InventoryView extends JDialog {
             for (Product product : inventory) {
                 Object[] rowData = {
                     product.getName(),
-                    product.getPublicPrice().toString(),
+                    product.getPublicPrice(),
                     product.getStock()
                 };
                 tableModel.addRow(rowData);

@@ -157,8 +157,8 @@ public class ProductView extends JDialog implements ActionListener {
 					JOptionPane.showMessageDialog(null, "Producto ya existe ", "Error", JOptionPane.ERROR_MESSAGE);
 
 				} else {
-					product = new Product(Shop.numberProducts, textFieldName.getText(),
-							new Amount(Double.parseDouble(textFieldPrice.getText())), true,
+					product = new Product(textFieldName.getText(),
+							Double.parseDouble(textFieldPrice.getText()), true,
 							Integer.parseInt(textFieldStock.getText()));
 					shop.addProduct(product);
 					JOptionPane.showMessageDialog(null, "Producto añadido ", "Information",

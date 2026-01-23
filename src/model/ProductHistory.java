@@ -1,5 +1,7 @@
 package model;
 
+import java.time.LocalDateTime;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -8,14 +10,23 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "inventory")
+@Table(name = "historical_inventory")
 
-public class Product {
+public class ProductHistory {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name = "id", unique = true) 
 	private int id;
+	
+	@Column(name = "available")
+	private boolean available;
+	
+	@Column(name = "created_at")
+	private String createdAt;
+	
+	@Column(name = "id_product")
+	private int idProduct;
 	
 	@Column(name = "name")
 	private String name;
@@ -23,26 +34,22 @@ public class Product {
 	@Column(name = "price")
 	private double price;
 	
-	@Column(name = "available")
-	private boolean available;
-	
 	@Column(name = "stock")
 	private int stock;
 	
-	private static int totalProducts;
-
-	public final static double EXPIRATION_RATE = 0.60;
-
-	public Product(String name, double wholesalerPrice, boolean available, int stock) {
+	// (product.getId(), product.getName(), product.getWholesalerPrice(),
+	// product.isAvailable(), product.getStock(), LocalDate.now().toString());
+	public ProductHistory(int productId, String name, double wholesalerPrice, boolean available, int stock) {
 		super();
+		this.available = available;
+		this.createdAt = LocalDateTime.now().toString();
+		this.idProduct = productId;
 		this.name = name;
 		this.price = wholesalerPrice;
-		this.available = available;
 		this.stock = stock;
-		totalProducts++;
 	}
 	
-	public Product(){}
+	public ProductHistory(){} 
 
 	public int getId() {
 		return id;
@@ -90,18 +97,6 @@ public class Product {
 
 	public void setStock(int stock) {
 		this.stock = stock;
-	}
-
-	public static int getTotalProducts() {
-		return totalProducts;
-	}
-
-	public static void setTotalProducts(int totalProducts) {
-		Product.totalProducts = totalProducts;
-	}
-
-	public void expire() {
-		this.price = this.getPublicPrice() * EXPIRATION_RATE;
 	}
 
 	@Override

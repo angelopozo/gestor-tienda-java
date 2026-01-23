@@ -74,7 +74,7 @@ public class DaoImplJDBC implements Dao {
 			for (model.Product product : inventory) {
 				ps.setInt(1, product.getId());
 				ps.setString(2, product.getName());
-				ps.setDouble(3, product.getWholesalerPrice().getValue());
+				ps.setDouble(3, product.getWholesalerPrice());
 				ps.setBoolean(4, product.isAvailable());
 				ps.setInt(5, product.getStock());
 
@@ -97,8 +97,8 @@ public class DaoImplJDBC implements Dao {
 
 		try (Statement stmt = connection.createStatement(); ResultSet rs = stmt.executeQuery(query)) {
 			while (rs.next()) {
-				Product product = new Product(rs.getInt("id"), rs.getString("name"),
-						new Amount(rs.getInt("wholesalerPrice")), rs.getBoolean("available"), rs.getInt("stock"));
+				Product product = new Product(rs.getString("name"),
+						rs.getInt("wholesalerPrice"), rs.getBoolean("available"), rs.getInt("stock"));
 				inventory.add(product);
 			}
 		} catch (Exception e) {
@@ -114,7 +114,7 @@ public class DaoImplJDBC implements Dao {
 		try (PreparedStatement ps = connection.prepareStatement(query)) {
 			ps.setInt(1, product.getId());
 			ps.setString(2, product.getName());
-			ps.setDouble(3, product.getWholesalerPrice().getValue());
+			ps.setDouble(3, product.getWholesalerPrice());
 			ps.setBoolean(4, product.isAvailable());
 			ps.setInt(5, product.getStock());
 

@@ -67,7 +67,7 @@ public class DaoImplFile implements Dao {
 				}
 				// add product to inventory
 
-				inventory.add(new Product(1, name, new Amount(wholesalerPrice), true, stock));
+				inventory.add(new Product(name, wholesalerPrice, true, stock));
 
 				// read next line
 				line = br.readLine();
