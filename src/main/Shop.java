@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import dao.Dao;
-import dao.DaoImplHibernate;
+import dao.DaoImplMongoDB;
 
 public class Shop {
 	private Amount cash = new Amount(100.00);
@@ -29,7 +29,7 @@ public class Shop {
 	private ArrayList<Sale> sales;
 	private int numberSales;
 
-	private static Dao dao = new DaoImplHibernate();
+	private static Dao dao = new DaoImplMongoDB();
 
 	final static double TAX_RATE = 1.04;
 
