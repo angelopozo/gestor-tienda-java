@@ -43,7 +43,7 @@ public class DaoImplMongoDB implements Dao {
 
 	@Override
 	public Employee getEmployee(int employeeId, String password) {
-		collection = mongoDatabase.getCollection("employee");
+		collection = mongoDatabase.getCollection("users");
 
 		Document document = collection.find(eq("employeeId", employeeId)).first();
 		
